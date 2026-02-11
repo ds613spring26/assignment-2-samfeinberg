@@ -91,7 +91,7 @@ st <- list(
 ## 1. Use an appropriate function to see the components of `st` in a concise way.
 
 ```{r}
-#| title: Exercise 1, Part 1
+#| title: Exercise 2, Part 1
 
 head(st)
 
@@ -100,7 +100,7 @@ head(st)
 ## 2. Use R code to determine the class of each element of `st`.
 
 ```{r}
-#| title: Exercise 1, Part 2
+#| title: Exercise 2, Part 2
 
 sapply(st, class)
 
@@ -110,6 +110,15 @@ sapply(st, class)
 
 ```         
 Your `st` list should now look like this:
+```
+
+```{r}
+#| title: Exercise 2, Part 3
+
+st$captain
+st$starship |>
+  rename(ship = ID) |>
+  left_join(st$captain)
 ```
 
 # Exercise 3: Diamonds
