@@ -51,6 +51,25 @@ two_month_sequence_info
 
 Given the following dates, compute the difference in **months** and **weeks** between each consecutive pair.
 
+```{r}
+#| title: Question 2 
+
+sample_dates <- c("2018-03-15", "2020-07-20", "2023-01-10", "2025-09-05") 
+dates <- ymd(sample_dates) 
+
+map2_dfr( 
+  dates[-length(dates)], 
+          dates[-1], 
+  ~ tibble(
+    from = .x, 
+    to = .y, 
+    months_difference = interval(.x, .y) %/% months(1), weeks_difference = as.numeric(difftime(
+      .y, 
+      .x, 
+      units = "weeks")) 
+    ))
+```
+
 ### Question 3:
 
 -   Load the `wmata_ridership` data frame into R from <https://dcgerard.github.io/stat_412_612/data/wmata_ridership.csv>. For each month, calculate the proportion of rides made on a given day of the month. Then make box plots of the proportions of ridership vs day of the weak. But exclude any days from 2004 and 2005.
