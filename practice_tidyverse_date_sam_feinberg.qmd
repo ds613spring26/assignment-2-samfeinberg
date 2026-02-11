@@ -74,6 +74,38 @@ map2_dfr(
 
 -   Load the `wmata_ridership` data frame into R from <https://dcgerard.github.io/stat_412_612/data/wmata_ridership.csv>. For each month, calculate the proportion of rides made on a given day of the month. Then make box plots of the proportions of ridership vs day of the weak. But exclude any days from 2004 and 2005.
 
+    ```{r}
+    #| title: Question 3
+
+    ridership_data <- read_csv("wmata_ridership.csv")
+
+    ridership_clean <- ridership_data |>
+      mutate(
+        year  = year(Date),
+        month = floor_date(Date, "month"),
+        day   = day(Date),
+        weekday = wday(Date, label = TRUE)
+      ) |>
+      filter(!year %in% c(2004, 2005))
+
+    monthly_proportions <- ridership_clean |>
+      group_by(month) |>
+      mutate(
+        monthly_total = sum(Total),
+        monthly_proportion = Total / monthly_total
+      ) |>
+      ungroup()
+
+    ggplot(monthly_proportions, aes(x = weekday, y = monthly_proportion)) +
+      geom_boxplot() +
+      labs(
+        title = "Monthly Ridership Proportions by Day of the Week",
+        x = "Day of the Week",
+        y = "Proportion of Monthly Rides"
+      ) +
+      theme_bw()
+    ```
+
 ### Question 4:
 
 -   Write only one line of the code to return only the leap years fo years 2024, 3021, 2000 or 1800, 800, 5050, 600 and 7156.
