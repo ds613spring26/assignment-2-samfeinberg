@@ -18,6 +18,17 @@ Constructing a function to execute tasks is an extremely beneficial practice, as
 Write a function (using r code and structure demonstrated in class) to calculate a z score for a given observed value, a mean, and a standard deviation value. And then use your function to find a z score for the following problem. (Research the internet to find the formula used to calculate a z score)\
 Observed value = 25.77, mean = 23.54, standard deviation = 2.442
 
+```{r}
+#| title: Question 2
+
+z_score <- function(observed_value, mean, standard_deviation) {
+  (observed_value - mean) / standard_deviation
+}
+
+z_score(25.77, 23.54, 2.442)
+
+```
+
 ## Question 3
 
 Write a function (using r code and the structure demonstrated in class) to calculate \# the natural log of a number multiplied by the common log of the same number divided by the cube root of a given prime number.\
