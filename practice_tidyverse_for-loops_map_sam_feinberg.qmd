@@ -99,6 +99,13 @@ head(st)
 
 ## 2. Use R code to determine the class of each element of `st`.
 
+```{r}
+#| title: Exercise 1, Part 2
+
+sapply(st, class)
+
+```
+
 ## 3. It seems that `starship` and `captain` can be merged into one data frame. Do this now.
 
 ```         
