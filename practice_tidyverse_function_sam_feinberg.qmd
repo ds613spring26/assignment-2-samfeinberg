@@ -49,3 +49,16 @@ calc(32, 11)
 ## Question 4
 
 Use and show R coding to calculate the standard deviation for each variable of the data table `mtcars` using the `Special For Loop Method`.
+
+```{r}
+#| title: Question 4
+
+head(mtcars)
+
+standard_deviation_vec <- vector(mode = "numeric", length = length(mtcars))
+for(i in seq_along(mtcars)) {
+  standard_deviation_vec[[i]] <- sd(mtcars[[i]], na.rm = TRUE)
+  }
+standard_deviation_vec
+
+```
