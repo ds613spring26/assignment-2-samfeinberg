@@ -146,15 +146,28 @@ summary(diamonds)
 ```{r}
 #| title: Exercise 3, Part 3
 
-diamonds |>
-  ggplot(aes(x = price, y = depth)) +
-  geom_point() +
-  geom_smooth() +
-  theme_bw()
-
 model <- lm(price ~ depth, data = diamonds)
 p_val <- summary(model)$coefficients["depth", "Pr(>|t|)"]
 p_val
+
 ```
 
 ## 4. Plot `depth` vs `price`, faceting by `color`, including an OLS line. Do the $p$-values in the previous question roughly match what you would expect based on the plots?
+
+```{r}
+#| title: Exercise 3, Part 4
+
+diamonds |>
+  ggplot(aes(x = depth, y = price)) +
+  geom_point(alpha = 0.05) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~ color) +
+  labs(
+    title = "Depth vs Price by Diamond Color",
+    x = "Depth",
+    y = "Price"
+  )
+
+## Based on these plots, the p-value from the last question is in line with what I would expect.
+
+```
