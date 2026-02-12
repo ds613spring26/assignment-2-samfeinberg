@@ -143,4 +143,18 @@ summary(diamonds)
 
 ## 3. Fit a linear model of `price` on `depth` and extract the $p$-value for the regression coefficient of `depth`
 
+```{r}
+#| title: Exercise 3, Part 3
+
+diamonds |>
+  ggplot(aes(x = price, y = depth)) +
+  geom_point() +
+  geom_smooth() +
+  theme_bw()
+
+model <- lm(price ~ depth, data = diamonds)
+p_val <- summary(model)$coefficients["depth", "Pr(>|t|)"]
+p_val
+```
+
 ## 4. Plot `depth` vs `price`, faceting by `color`, including an OLS line. Do the $p$-values in the previous question roughly match what you would expect based on the plots?
