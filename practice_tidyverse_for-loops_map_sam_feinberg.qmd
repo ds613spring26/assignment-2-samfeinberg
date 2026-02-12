@@ -5,7 +5,7 @@ Acknowledgement: "Thanks to Dr. David Gerard"
 output: pdf_document
 urlcolor: "blue"
 params: 
-  solutions: FALSE
+  solutions: TRUE
 format: html
 editor: visual
 author: Sam Feinberg
@@ -92,6 +92,7 @@ st <- list(
 
 ```{r}
 #| title: Exercise 2, Part 1
+#| include: true
 
 head(st)
 
