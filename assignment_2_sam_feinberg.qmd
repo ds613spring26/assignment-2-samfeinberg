@@ -1,0 +1,299 @@
+---
+title: "assignment_2"
+format: html
+editor: visual
+author: Sam Feinberg
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 3, 
+                      fig.width  = 6,
+                      fig.align  = "center")
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+```{r}
+#| message: false
+
+library(tidyverse)
+library(lubridate)
+```
+
+# Question 1:
+
+Write a function `pos_na()` that takes two vectors of equal length and returns the positions where **both** vectors contain `NA`.
+
+```{r}
+x = c(1, NA, 2)
+y = c(NA, NA)
+a = c(NA, NA, 2)
+b = c(NA, NA, 2)
+c = c(NA, 5, NA) 
+d = c(NA, NA, NA)
+e = c(NA, NA, NA, 2, NA, 4, NA) 
+f = c(NA, NA, 2, 4, 4, NA, NA)
+g = c(1, NA, NA, 2, NA, 4, NA)
+h = c(NA, -5, 2, 4, 4, NA, 11)
+
+pos_na <- function(vec1, vec2) {
+  if (length(vec1) != length(vec2)) {"The vectors are not the same length." 
+} else {
+  which(is.na(vec1) & is.na(vec2))
+  }}
+
+pos_na(x, y)
+pos_na(a, b)
+pos_na(c, d)
+pos_na(e, f)
+pos_na(g, h)
+```
+
+\
+If the vectors do **not** have the same length, the function should return the message:
+
+> `"The vectors are not the same length."`
+
+Use the following pairs of vectors to test your function:
+
+1.  `c(1, NA, 2)` and `c(NA, NA)`
+2.  `c(NA, NA, 2)` and `c(NA, NA, 2)`
+3.  `c(NA, 5, NA)` and `c(NA, NA, NA)`
+4.  `c(NA, NA, NA, 2, NA, 4, NA)` and `c(NA, NA, 2, 4, 4, NA, NA)`
+5.  `c(1, NA, NA, 2, NA, 4, NA)` and `c(NA, -5, 2, 4, 4, NA, 11)`
+
+Here’s a polished, professional way to label those two parts of the assignment. It reads cleanly and sets expectations without adding extra wording.
+
+------------------------------------------------------------------------
+
+### (1i) Using an `if` statement
+
+Write a version of `pos_na()` that checks whether the two input vectors have the same length using an `if` statement.
+
+-   If they do, return the positions where both vectors contain `NA`.
+
+-   If they do not, return the message:
+
+> `"The vectors are not the same length."`
+
+```{r}
+#| title: Question 1 i
+
+pos_na <- function(vec1, vec2) {
+  if (length(vec1) != length(vec2)) {"The vectors are not the same length." 
+} else {
+  which(is.na(vec1) & is.na(vec2))
+}}   
+
+pos_na(x, y)
+pos_na(a, b)
+```
+
+### (1ii) Without using an `if` statement
+
+Write a second version of `pos_na()` that performs the same task **without** using an `if` statement.
+
+-   You may use any other valid R mechanism (e.g., `stop()`, `stopifnot()`, or logical short‑circuiting) to handle the case where the vectors differ in length.
+
+    ```{r}
+    #| title: Question 1 ii
+
+    pos_na_2 <- function(vec1, vec2) {
+      length(vec1) == length(vec2) ||
+        return("The vectors are not the same length.")
+      which(is.na(vec1) & is.na(vec2))
+    }
+
+    pos_na_2(x, y)
+    pos_na_2(a, b)
+    ```
+
+# Question 2
+
+Load the `wmata_ridership` data frame into R from <https://dcgerard.github.io/stat_412_612/data/wmata_ridership.csv>. For each month, calculate the proportion of rides made on a given day of the month. Then make box plots of the
+
+```{r}
+#| title: Question 2
+
+library(readr)
+library(purrr)
+ridership_data <- read_csv("wmata_ridership.csv")
+head(ridership_data)
+
+ridership_clean <- ridership_data |>
+  mutate(
+    year  = year(Date),
+    month = floor_date(Date, "month"),
+    day   = day(Date),
+    weekday = wday(Date, label = TRUE)
+  ) |>
+  filter(!year %in% c(2004, 2005))
+
+monthly_proportions <- ridership_clean |>
+  group_by(month) |>
+  mutate(
+    monthly_total = sum(Total),
+    monthly_proportion = Total / monthly_total
+  ) |>
+  ungroup()
+
+ggplot(monthly_proportions, aes(x = weekday, y = monthly_proportion)) +
+  geom_boxplot() +
+  labs(
+    title = "Monthly Ridership Proportions by Day of the Week",
+    x = "Day of the Week",
+    y = "Proportion of Monthly Rides"
+  ) +
+  theme_bw()
+```
+
+# Question 3:
+
+Write R code that extracts the elements "Bears", "Dolphins", and "Bengals" from the vector `V` shown below, and display the result.
+
+```{r}
+#| title: Question 3
+
+V <- c("Bears", "Lions", "Dolphins", "Eagles", "Bengals")
+
+V[c(1, 3, 5)]
+
+```
+
+## (3i) Subsetting by index
+
+```{r}
+#| title: Question 3 i
+
+V <- c("Bears", "Lions", "Dolphins", "Eagles", "Bengals")
+
+V[c(1, 3, 5)]
+```
+
+## (3ii) Subsetting using a `for` loop
+
+```{r}
+#| title: Question 3 ii
+
+V <- c("Bears", "Lions", "Dolphins", "Eagles", "Bengals")
+result <- character(0)
+
+for (i in seq_along(V)) {
+  if (V[i] %in% c("Bears", "Dolphins", "Bengals")) {
+    result <- c(result, V[i])
+  }
+}
+
+result
+```
+
+## (3iii)Returning all values in a single vector (one line of code)
+
+### (a) Using positive indices
+
+```{r}
+#| title: Question 3 iii a
+
+V <- c("Bears", "Lions", "Dolphins", "Eagles", "Bengals")
+
+V[c(1, 3, 5)]
+```
+
+### (b) Using negative indices
+
+```{r}
+#| title: Question 3 iii a\b
+
+V <- c("Bears", "Lions", "Dolphins", "Eagles", "Bengals")
+
+V[c(-2, -4)]
+
+```
+
+### (c) Using logical indexing
+
+```{r}
+#| title: Question 3 iii c
+
+V <- c("Bears", "Lions", "Dolphins", "Eagles", "Bengals")
+
+V[V %in% c("Bears", "Dolphins", "Bengals")]
+
+V
+```
+
+### (d) Attempting to subset by names
+
+```{r}
+#| title: Question 3 iii c
+
+V <- c("Bears", "Lions", "Dolphins", "Eagles", "Bengals")
+names(V) <- V
+
+
+V[c("Bears", "Dolphins", "Bengals")]
+
+```
+
+# Question 4:
+
+You are given a character vector containing messy employee records. Each entry includes:
+
+-   an employee name (string),
+-   a hire date in inconsistent formats,
+-   and a department code that should be treated as a factor.
+
+```{r}
+records <- c(
+  "Steve McQueen | 2020-01-15 | HR",
+  "B. Smith | 15/02/2021 | FIN",
+  "Carlos M | March 3, 2019 | IT",
+  "D. Lee | 2018/07/30 | HR",
+  "Alain Delon | 04-12-2020 | MKT"
+)
+records
+
+```
+
+1.  **Parse each record** into three separate variables:
+
+    -   `name`\
+    -   `hire_date`\
+    -   `dept`
+
+```{r}
+#| title: Question 4 Part 1
+
+employees <- tibble(raw = records) |>
+  separate(raw, into = c("name", "hire_date", "dept"), sep = "\\|") |>
+  mutate(
+    name = str_trim(name),
+    hire_date = str_trim(hire_date),
+    dept = str_trim(dept)
+  )
+
+employees
+```
+
+1.  **Convert `hire_date` into a proper `Date` object**, correctly handling all of the different date formats.
+
+2.  **Convert `dept` into an ordered factor** with the levels:\
+    `HR`, `FIN`, `IT`, `MKT`.
+
+3.  **Construct a clean data frame** containing the parsed and converted variables.
+
+4.  **Add a new variable** called `years_worked` that reports the number of full years each employee has worked as of today.
+
+5.  **Return the final cleaned data frame.**
+
+```{r}
+#| title: Question 4, remaining parts
+employees <- employees |>
+  mutate(
+    hire_date = parse_date_time(hire_date, orders = c("Y-m-d", "d/m/Y", "B d, Y", "Y/m/d", "d-m-Y")),
+    dept = factor(dept),
+    years_worked = as.integer(floor(time_length(interval(hire_date, today()), "years")))
+  )
+
+employees
+```
